@@ -17,8 +17,7 @@ Paste this into your coding agent from your project directory:
 
 ```text
 Help me set up AutoAstra using https://github.com/shshnkreddy/autoastra.
-Install it in my Python environment and generate the affine demo preview.
-Show me the task the agent will see and the command to run it on my Docker host.
+Install it in my Python environment and show me the command to run the affine demo on my Docker host.
 ```
 
 ## Run the demo
