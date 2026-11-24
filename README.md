@@ -1,4 +1,4 @@
-<h1 align="center">AutoAstra</h1>
+<h1 align="center">AutoAstra 🚀</h1>
 
 <p align="center"><strong>A coding agent writes and tests Python solutions against a fitness function you define.</strong></p>
 
