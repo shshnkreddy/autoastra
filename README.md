@@ -64,7 +64,7 @@ With Python 3.11 or newer, install AutoAstra:
 pip install autoastra
 ```
 
-This installs AutoAstra and its Python dependencies. For live runs, also install [Docker](https://docs.docker.com/engine/install/) and your chosen agent CLI on a Linux execution host.
+This installs AutoAstra and its Python dependencies. Also install [Docker](https://docs.docker.com/engine/install/) and your chosen agent CLI on a Linux execution host.
 
 ## Configure coding agent
 
