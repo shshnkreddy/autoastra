@@ -66,7 +66,7 @@ autoastra preview tasks.affine:task --output previews/affine --print-to previews
 ```
 
 <details>
-<summary><strong>Configure model access</strong></summary>
+<summary><strong>Configure coding agent</strong></summary>
 
 `pip install autoastra` installs AutoAstra and its Python dependencies. For live runs, separately install [Docker](https://docs.docker.com/engine/install/) and one of the agent CLIs below on your Linux execution host.
 
