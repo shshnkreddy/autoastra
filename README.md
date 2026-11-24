@@ -56,19 +56,17 @@ Help me set up AutoAstra using https://github.com/shshnkreddy/autoastra.
 Install it in my Python environment and show me the command to run the affine demo on my Docker host.
 ```
 
-## Run the demo
+## Setup
 
-The affine demo asks the agent to infer a linear rule from examples. With Python 3.11 or newer, install AutoAstra from PyPI and preview the task before signing in.
+With Python 3.11 or newer, install AutoAstra:
 
 ```sh
 pip install autoastra
-autoastra preview tasks.affine:task --output previews/affine --print-to previews/affine.md
 ```
 
-<details>
-<summary><strong>Configure coding agent</strong></summary>
+This installs AutoAstra and its Python dependencies. For live runs, also install [Docker](https://docs.docker.com/engine/install/) and your chosen agent CLI on a Linux execution host.
 
-`pip install autoastra` installs AutoAstra and its Python dependencies. For live runs, separately install [Docker](https://docs.docker.com/engine/install/) and one of the agent CLIs below on your Linux execution host.
+## Configure coding agent
 
 **Install your chosen agent** (you only need one):
 
@@ -104,7 +102,13 @@ Use a different profile directory and sign in again for each subscription accoun
 
 OpenCode uses API keys here; AutoAstra does not import its saved interactive logins.
 
-</details>
+## Run the demo
+
+The affine demo asks the agent to infer a linear rule from examples. Preview the task to see what the agent will receive:
+
+```sh
+autoastra preview tasks.affine:task --output previews/affine --print-to previews/affine.md
+```
 
 Once configured, run the demo (Codex is the default):
 
