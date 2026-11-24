@@ -17,7 +17,7 @@ One Codex, Claude Code, or OpenCode session runs the experiment in Docker. The a
 ```text
 task_spec.md ──▶ agent ──edits──▶ final_solution.py
                    ▲                      │
-                   │                      │ register snapshot
+                   │                      │ submit for eval
                    │                      ▼
                    └── score ────── fitness-eval
 ```
