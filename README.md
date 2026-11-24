@@ -1,48 +1,61 @@
-# AutoAstra
+<h1 align="center">AutoAstra</h1>
 
-AutoAstra runs a coding agent in Docker to improve a Python solution against a fitness function you define. The agent edits and evaluates its solution in a single session. Each run saves the selected solution and an experiment ledger showing what the agent tried and how it scored.
+<p align="center"><strong>A coding agent writes and tests Python solutions against a fitness function you define.</strong></p>
 
-## Quickstart
+<p align="center">
+  <a href="#set-up-with-an-agent">Agent setup</a> ·
+  <a href="#run-the-demo">Quickstart</a> ·
+  <a href="#bring-your-own-task">Custom tasks</a> ·
+  <a href="tasks/affine/">Example task</a>
+</p>
 
-Install AutoAstra in a Python 3.11+ environment. To start a live run, use a Linux host with Docker and your chosen agent CLI.
+AutoAstra runs one Codex, Claude Code, or OpenCode session in Docker. The agent edits its solution, evaluates it, and uses the score to decide what to try next. Each run saves the selected `final_solution.py` and an experiment ledger linking each attempt to its source and score.
+
+## Set up with an agent
+
+Paste this into your coding agent from your project directory:
+
+```text
+Help me set up AutoAstra using https://github.com/shshnkreddy/autoastra.
+Install it in my Python environment and generate the affine demo preview.
+Show me the task the agent will see and the command to run it on my Docker host.
+```
+
+## Run the demo
+
+The affine demo asks the agent to infer a linear rule from examples. Install with Python 3.11+ and generate a preview you can read before signing in:
 
 ```sh
 python -m pip install git+https://github.com/shshnkreddy/autoastra.git
-```
-
-The bundled affine demo asks the agent to infer a linear rule from examples. You can preview the task before configuring model access.
-
-```sh
 autoastra preview tasks.affine:task --output previews/affine --print-to previews/affine.md
 ```
 
-Choose one way to connect your agent:
-
-| Provider | Setup on the execution host |
-| --- | --- |
-| Codex (default) | Set `AUTOASTRA_CODEX_HOME` to a dedicated profile and sign in with `CODEX_HOME="$AUTOASTRA_CODEX_HOME" codex -c 'cli_auth_credentials_store="file"' login`. |
-| OpenRouter via Codex | Export `OPENROUTER_API_KEY` and pass `--provider openrouter --model PROVIDER/MODEL`. |
-| Claude Code | Export `ANTHROPIC_API_KEY` or `CLAUDE_CODE_OAUTH_TOKEN` and pass `--provider anthropic`. |
-| OpenCode | Export your backend’s API key and pass `--provider opencode --model provider/model`. |
-
-Run the demo, then inspect the result:
+For a live run, use a Linux host with Docker and your chosen agent CLI. With a configured Codex subscription:
 
 ```sh
 autoastra run tasks.affine:task --output runs/affine
 autoastra result runs/affine
 ```
 
-Open `runs/affine/task/workspace/final_solution.py` for the selected solution and `runs/affine/task/ledger/ledger.md` for the experiment history. Use `autoastra run --help` for budgets, parallel seeds, and GPU options.
+<details>
+<summary><strong>Configure model access</strong></summary>
 
-## Create a task
+| Provider | Setup on the execution host |
+| --- | --- |
+| Codex (default) | Set `AUTOASTRA_CODEX_HOME` to a dedicated profile directory. Sign in with `CODEX_HOME="$AUTOASTRA_CODEX_HOME" codex -c 'cli_auth_credentials_store="file"' login`. |
+| OpenRouter via Codex | Export `OPENROUTER_API_KEY` and pass `--provider openrouter --model PROVIDER/MODEL`. |
+| Claude Code | Export `ANTHROPIC_API_KEY` or `CLAUDE_CODE_OAUTH_TOKEN` and pass `--provider anthropic`. |
+| OpenCode | Export your backend’s API key and pass `--provider opencode --model provider/model`. |
 
-Define a `Task` in your own Python module with three inputs:
+</details>
 
-- **Task specification** — what the agent should build, the solution interface, and which metric to minimize or maximize.
-- **Fitness function** — a Python function that loads the submitted solution and returns a numeric score.
-- **Docker image** — the environment containing Python and your task’s dependencies. Use a locally built image or one from a registry.
+Read the experiment history in `runs/affine/task/ledger/ledger.md`. For budgets, parallel seeds, and GPUs, see `autoastra run --help`.
 
-The [affine task](tasks/affine/) is a complete example. If you define an object named `task` in `my_task.py`, run it from that directory with:
+## Bring your own task
+
+Define a `Task` in a Python module. Give it a **task specification** describing what to build and which metric to optimize, a **fitness function** that scores the submitted solution, and a **Docker image** with the task’s dependencies. See the [affine task definition](tasks/affine/__init__.py) and its [evaluator](tasks/affine/evaluate.py).
+
+If your module is `my_task.py` and the object is named `task`, run:
 
 ```sh
 autoastra run my_task:task --output runs/my-task
