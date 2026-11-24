@@ -47,8 +47,6 @@ task_spec.md ──▶ agent ──edits──▶ final_solution.py
 
 </details>
 
-The experiment ledger links each score to the exact source revision that produced it. When the run ends, AutoAstra restores the best-scoring revision to `final_solution.py` by default.
-
 ## Set up with an agent
 
 Paste this into your coding agent from your project directory:
