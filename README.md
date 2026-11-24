@@ -90,7 +90,13 @@ Read the experiment history in `runs/affine/task/ledger/ledger.md`. For budgets,
 
 Define a `Task` in a Python module. Give it a **task specification** describing what to build and which metric to optimize, a **fitness function** that scores the submitted solution, and a **Docker image** with the task’s dependencies. See the [affine task definition](tasks/affine/__init__.py) and its [evaluator](tasks/affine/evaluate.py).
 
-If your module is `my_task.py` and the object is named `task`, run:
+If your module is `my_task.py` and the object is named `task`, preview it first to check the instructions and files the coding agent will see:
+
+```sh
+autoastra preview my_task:task --output previews/my-task --print-to previews/my-task.md
+```
+
+Then start the run:
 
 ```sh
 autoastra run my_task:task --output runs/my-task
