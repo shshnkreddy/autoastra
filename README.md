@@ -65,24 +65,53 @@ pip install autoastra
 autoastra preview tasks.affine:task --output previews/affine --print-to previews/affine.md
 ```
 
-For a live run, use a Linux host with Docker and your chosen agent CLI. With a configured Codex subscription:
+`pip install autoastra` installs AutoAstra and its Python dependencies. For live runs, separately install [Docker](https://docs.docker.com/engine/install/) and one of the agent CLIs below on your Linux execution host.
+
+<details>
+<summary><strong>Configure model access</strong></summary>
+
+**Install your chosen agent** (you only need one):
+
+| Agent | Install command |
+| --- | --- |
+| [Codex](https://learn.chatgpt.com/docs/codex/cli) | `curl -fsSL https://chatgpt.com/codex/install.sh \| sh` |
+| [Claude Code](https://code.claude.com/docs/en/setup) | `curl -fsSL https://claude.ai/install.sh \| bash` |
+| [OpenCode v1](https://opencode.ai/install) | `curl -fsSL https://opencode.ai/install \| bash` |
+
+Make the installed commands available in your launch shell:
+
+```sh
+export PATH="$HOME/.local/bin:$HOME/.opencode/bin:$PATH"
+```
+
+**Codex subscription (default):** sign in with the ChatGPT account you want to use:
+
+```sh
+export AUTOASTRA_CODEX_HOME="$HOME/.codex-autoastra"
+CODEX_HOME="$AUTOASTRA_CODEX_HOME" codex -c 'cli_auth_credentials_store="file"' login
+```
+
+Use a different profile directory and sign in again for each subscription account.
+
+**Other access options:** create an API key in your provider's console, or use a Claude subscription token. Set the variable in the same shell that launches AutoAstra.
+
+| Access | Setup | Add to `autoastra run` |
+| --- | --- | --- |
+| OpenRouter via Codex | `export OPENROUTER_API_KEY="your-key"` | `--provider openrouter --model PROVIDER/MODEL` |
+| Claude API | `export ANTHROPIC_API_KEY="your-key"` | `--provider anthropic` |
+| [Claude subscription](https://code.claude.com/docs/en/authentication#generate-a-long-lived-token) | Run `claude setup-token`, sign in, then `export CLAUDE_CODE_OAUTH_TOKEN="the-returned-token"`. Leave `ANTHROPIC_API_KEY` unset to use the subscription. | `--provider anthropic` |
+| OpenCode | Export the key for your model: `OPENROUTER_API_KEY`, `ANTHROPIC_API_KEY`, `OPENAI_API_KEY`, or `OPENCODE_API_KEY`. For example, `export OPENROUTER_API_KEY="your-key"`. | `--provider opencode --model provider/model` |
+
+OpenCode uses API keys here; AutoAstra does not import its saved interactive logins.
+
+</details>
+
+Once configured, run the demo (Codex is the default):
 
 ```sh
 autoastra run tasks.affine:task --output runs/affine
 autoastra result runs/affine
 ```
-
-<details>
-<summary><strong>Configure model access</strong></summary>
-
-| Provider | Setup on the execution host |
-| --- | --- |
-| Codex (default) | Set `AUTOASTRA_CODEX_HOME` to a dedicated profile directory. Sign in with `CODEX_HOME="$AUTOASTRA_CODEX_HOME" codex -c 'cli_auth_credentials_store="file"' login`. |
-| OpenRouter via Codex | Export `OPENROUTER_API_KEY` and pass `--provider openrouter --model PROVIDER/MODEL`. |
-| Claude Code | Export `ANTHROPIC_API_KEY` or `CLAUDE_CODE_OAUTH_TOKEN` and pass `--provider anthropic`. |
-| OpenCode | Export your backend’s API key and pass `--provider opencode --model provider/model`. |
-
-</details>
 
 Read the experiment history in `runs/affine/task/ledger/ledger.md`. For budgets, parallel seeds, and GPUs, see `autoastra run --help`.
 
