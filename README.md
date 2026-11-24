@@ -3,14 +3,14 @@
 <p align="center"><strong>A coding agent writes and tests Python solutions against a fitness function you define.</strong></p>
 
 <p align="center">
-  <a href="#how-it-works">How it works</a> ·
+  <a href="#autoresearch-loop">Autoresearch loop</a> ·
   <a href="#set-up-with-an-agent">Agent setup</a> ·
   <a href="#run-the-demo">Quickstart</a> ·
   <a href="#bring-your-own-task">Custom tasks</a> ·
   <a href="tasks/affine/">Example task</a>
 </p>
 
-## How it works
+## Autoresearch loop
 
 One Codex, Claude Code, or OpenCode session runs the experiment in Docker. The agent uses each score to decide what to try next.
 
@@ -21,6 +21,31 @@ task_spec.md ──▶ agent ──edits──▶ final_solution.py
                    │                      ▼
                    └── score ────── fitness-eval
 ```
+
+<details>
+<summary><strong>Sandbox directory structure</strong></summary>
+
+```text
+/task/
+├── AGENTS.md              # CLAUDE.md for Claude Code
+├── bin/                   # Read-only commands
+│   ├── fitness-eval
+│   ├── experiment-ledger
+│   └── lifetime
+├── context/               # Read-only task files
+│   ├── task_spec.md
+│   ├── fitness_api.md
+│   ├── run_config.json
+│   └── ledger.py
+├── ledger/                # Read-only experiment history
+│   ├── ledger.jsonl
+│   └── snapshots/
+└── workspace/             # Editable
+    ├── final_solution.py
+    └── scratch.py
+```
+
+</details>
 
 The experiment ledger links each score to the exact source revision that produced it. When the run ends, AutoAstra restores the best-scoring revision to `final_solution.py` by default.
 
