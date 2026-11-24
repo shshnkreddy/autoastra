@@ -68,7 +68,7 @@ This installs AutoAstra and its Python dependencies. For live runs, also install
 
 ## Configure coding agent
 
-**Install your chosen agent** (you only need one):
+**Install your chosen agent(s):**
 
 | Agent | Install command |
 | --- | --- |
