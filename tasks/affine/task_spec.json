@@ -1,0 +1,24 @@
+{
+  "name": "affine",
+  "title": "Learn an affine function",
+  "description": "Your goal is to learn the relationship between x and y from the public examples below, then predict y for new values of x. The relationship is affine, meaning it has the form y = a * x + b for fixed, unknown coefficients a and b. Design a solution that generalises to new inputs and minimises its prediction error.",
+  "solution_interface": "Write a self-contained final_solution.py with a function named predict(xs). The argument xs is a list of numbers. Return a Python list with one finite numeric prediction for each input, in the same order. The evaluator loads your file and calls predict(xs). For example, predict([0, 1]) must return a list containing two predictions.",
+  "metric": "mean_absolute_error",
+  "metric_description": "Fitness is the mean absolute error over the evaluation inputs. For each input, take the absolute difference between your prediction and the reference value, then average those differences. A fitness of zero means every prediction was correct on that evaluation set.",
+  "direction": "minimize",
+  "constraints": [
+    "Use the public training examples to determine the relationship. Evaluation queries may include values outside the range of the training inputs.",
+    "Use Python and its standard library. Keep all code and fitted parameters needed for prediction in final_solution.py.",
+    "Return finite numbers. Boolean values, missing predictions, and extra predictions are invalid.",
+    "The solution must run independently of scratch.py, the experiment ledger, and any development files.",
+    "Use only the supplied task information. Access to private reference answers, evaluator internals, and network services is outside the solution interface."
+  ],
+  "evaluation": "During development, use fitness-eval to measure the current solution on development queries. After development, the runner selects the best officially scored revision and evaluates it on a separate set of final queries. This task is deterministic, so its evaluator does not use the random seed.",
+  "training_examples": [
+    {"x": 0, "y": 1},
+    {"x": 1, "y": 3},
+    {"x": 3, "y": 7},
+    {"x": 5, "y": 11}
+  ],
+  "scope": "This synthetic task demonstrates the research workflow. Its results are intended to check that the workflow operates correctly."
+}
