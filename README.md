@@ -3,13 +3,26 @@
 <p align="center"><strong>A coding agent writes and tests Python solutions against a fitness function you define.</strong></p>
 
 <p align="center">
+  <a href="#how-it-works">How it works</a> ·
   <a href="#set-up-with-an-agent">Agent setup</a> ·
   <a href="#run-the-demo">Quickstart</a> ·
   <a href="#bring-your-own-task">Custom tasks</a> ·
   <a href="tasks/affine/">Example task</a>
 </p>
 
-AutoAstra runs one Codex, Claude Code, or OpenCode session in Docker. The agent edits its solution, evaluates it, and uses the score to decide what to try next. Each run saves the selected `final_solution.py` and an experiment ledger linking each attempt to its source and score.
+## How it works
+
+One Codex, Claude Code, or OpenCode session runs the experiment in Docker. The agent uses each score to decide what to try next.
+
+```text
+task_spec.md ──▶ agent ──edits──▶ final_solution.py
+                   ▲                      │
+                   │                      │ register snapshot
+                   │                      ▼
+                   └── score ────── fitness-eval
+```
+
+The experiment ledger links each score to the exact source revision that produced it. When the run ends, AutoAstra restores the best-scoring revision to `final_solution.py` by default.
 
 ## Set up with an agent
 
