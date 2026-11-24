@@ -23,10 +23,10 @@ Show me the task the agent will see and the command to run it on my Docker host.
 
 ## Run the demo
 
-The affine demo asks the agent to infer a linear rule from examples. Install with Python 3.11+ and generate a preview you can read before signing in:
+The affine demo asks the agent to infer a linear rule from examples. With Python 3.11 or newer, install AutoAstra from PyPI and preview the task before signing in.
 
 ```sh
-python -m pip install git+https://github.com/shshnkreddy/autoastra.git
+pip install autoastra
 autoastra preview tasks.affine:task --output previews/affine --print-to previews/affine.md
 ```
 
