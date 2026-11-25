@@ -194,6 +194,38 @@ Define a `Task` in a Python module. Give it a **task specification** describing 
 
 The image must contain Python and your environment's dependencies. You can build it on the execution host or use an image from Docker Hub or another registry. AutoAstra reuses the local image if present and pulls it if missing; it does not build images automatically.
 
+<details>
+<summary><strong>Example: Mountain Car task object</strong></summary>
+
+From [`tasks/continuous_mountain_car/__init__.py`](tasks/continuous_mountain_car/__init__.py):
+
+```python
+"""Code policies for Gymnax Continuous Mountain Car."""
+
+import json
+from pathlib import Path
+
+from autoastra.task import Task
+from .evaluate import evaluate
+
+_directory = Path(__file__).parent
+
+task = Task(
+    task_spec=json.loads((_directory / "task_spec.json").read_text()),
+    fitness_fn=evaluate,
+    image="autoastra-mountain-car:cpu",
+    starter=(_directory / "starter.py").read_text(),
+    context_files={name: (_directory / name).read_text() for name in
+                   ("policy_api.md", "environment.md")},
+    run_config=json.loads((_directory / "run_config.json").read_text()),
+)
+```
+
+`starter` provides the initial solution, `context_files` adds read-only instructions,
+and `run_config` sets the time, token, and evaluation budgets.
+
+</details>
+
 If your module is `my_task.py` and the object is named `task`, preview it first to check the instructions and files the coding agent will see:
 
 ```sh
