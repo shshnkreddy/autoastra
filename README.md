@@ -52,8 +52,17 @@ task_spec.md ──▶ agent ──edits──▶ final_solution.py
 Paste this into your coding agent from your project directory:
 
 ```text
-Help me set up AutoAstra using https://github.com/shshnkreddy/autoastra.
-Install it in my Python environment and show me the command to run the affine demo on my Docker host.
+I want to use AutoAstra to optimise my task. Its documentation is at
+https://github.com/shshnkreddy/autoastra. Help me set it up for this project.
+
+1. Read the README. Help me install AutoAstra and my chosen coding agent,
+   configure an API key or subscription login/token, and set up a custom
+   task if needed.
+2. If I need a custom task:
+   a. Ask whether I want to create it from an existing codebase.
+   b. Always generate and show me a preview of the initial sandbox.
+   c. Ensure the required Docker image is available locally on the machine
+      that will run the task; build or pull it if necessary.
 ```
 
 ## Setup
