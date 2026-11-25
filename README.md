@@ -195,30 +195,6 @@ Define a `Task` in a Python module. Give it a **task specification** describing 
 
 The image must contain Python and your environment's dependencies. You can build it on the execution host or use an image from Docker Hub or another registry. AutoAstra reuses the local image if present and pulls it if missing; it does not build images automatically.
 
-<details>
-<summary><strong>Minimal task object: affine regression</strong></summary>
-
-From [`tasks/affine/__init__.py`](tasks/affine/__init__.py):
-
-```python
-import json
-from pathlib import Path
-
-from autoastra.task import Task
-from .evaluate import evaluate
-
-task = Task(
-    task_spec=json.loads(Path(__file__).with_name("task_spec.json").read_text()),
-    fitness_fn=evaluate,
-    image="python:3.12-slim",
-    run_config=json.loads(Path(__file__).with_name("run_config.json").read_text()),
-)
-```
-
-[`task_spec.json`](tasks/affine/task_spec.json) describes the problem, `evaluate` scores the submitted solution, and [`run_config.json`](tasks/affine/run_config.json) sets the run budgets. This demo only needs Python, so it uses `python:3.12-slim`.
-
-</details>
-
 If your module is `my_task.py` and the object is named `task`, preview it first to check the instructions and files the coding agent will see:
 
 ```sh
