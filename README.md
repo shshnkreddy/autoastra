@@ -6,7 +6,7 @@
   <a href="#autoresearch-loop">Autoresearch loop</a> ·
   <a href="#set-up-with-an-agent">Agent setup</a> ·
   <a href="#run-the-demo">Quickstart</a> ·
-  <a href="#bring-your-own-task">Custom tasks</a> ·
+  <a href="#setup-your-own-task">Custom tasks</a> ·
   <a href="tasks/continuous_mountain_car/">Example task</a>
 </p>
 
@@ -188,7 +188,7 @@ and reporting, or read the complete initial sandbox previews:
 [Claude Code](previews/continuous-mountain-car/claude.md), and
 [OpenCode](previews/continuous-mountain-car/opencode.md).
 
-## Bring your own task
+## Setup your own task
 
 Define a `Task` in a Python module. Give it a **task specification** describing what to build and which metric to optimize, a **fitness function** that scores the submitted solution, and a **Docker image** with the task’s dependencies. See the [Mountain Car task](tasks/continuous_mountain_car/__init__.py), or the smaller [affine task definition](tasks/affine/__init__.py) and its [evaluator](tasks/affine/evaluate.py).
 
