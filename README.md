@@ -7,7 +7,7 @@
   <a href="#set-up-with-an-agent">Agent setup</a> ·
   <a href="#run-the-demo">Quickstart</a> ·
   <a href="#bring-your-own-task">Custom tasks</a> ·
-  <a href="tasks/affine/">Example task</a>
+  <a href="tasks/continuous_mountain_car/">Example task</a>
 </p>
 
 ## Autoresearch loop
@@ -116,20 +116,70 @@ OpenCode uses API keys here; AutoAstra does not import its saved interactive log
 
 ## Run the demo
 
-The affine demo asks the agent to infer a linear rule from examples. Preview the task to see what the agent will receive:
+The Mountain Car demo asks the agent to write a policy in `final_solution.py`
+that drives a car up a hill, maximising the environment's mean episode return.
+
+On your Linux execution machine, get the checkout if you do not already have it:
 
 ```sh
-autoastra preview tasks.affine:task --output previews/affine --print-to previews/affine.md
+git clone https://github.com/shshnkreddy/autoastra.git
+cd autoastra
 ```
 
-Once configured, run the demo (Codex is the default):
+Build the CPU environment, then preview what the agent will see:
 
 ```sh
-autoastra run tasks.affine:task --output runs/affine
-autoastra result runs/affine
+docker build -t autoastra-mountain-car:cpu tasks/continuous_mountain_car
+autoastra preview tasks.continuous_mountain_car:task \
+  --provider codex --output previews/mountain-car --print-to previews/mountain-car.md
 ```
 
-Read the experiment history in `runs/affine/task/ledger/ledger.md`. For budgets, parallel seeds, and GPUs, see `autoastra run --help`.
+With your coding agent configured, start one run:
+
+```sh
+autoastra run tasks.continuous_mountain_car:task \
+  --provider codex --model gpt-6.1-sol --seed 0 \
+  --cpus 2 --memory-mb 4096 --output runs/mountain-car
+autoastra result runs/mountain-car
+```
+
+The default budget is two hours, with no token or evaluation-count limit. Read
+its experiment history in `runs/mountain-car/task/ledger/ledger.md`. After the
+run finishes, evaluate the selected policy on the separate held-out batch:
+
+```sh
+python -m autoastra.wrappers.mountain_car runs/mountain-car \
+  --output reports/mountain-car-test
+```
+
+<details>
+<summary><strong>Generated final policy and return — Sol 6.1, seed 0</strong></summary>
+
+**Final held-out return: 99.65** (mean over 1,024 episodes).
+
+The generated policy's controller is shown below. Its encoded trajectory table
+and decoding code are omitted for readability; this excerpt is not standalone.
+
+```python
+import jax.numpy as jnp
+
+# _TABLE is decoded from the packed trajectory data in the complete file.
+
+def init_state():
+    return jnp.asarray(0,jnp.int32),jnp.asarray(0.,jnp.float32)
+
+def act(obs,state,rng):
+    t,x0=state
+    x0=jnp.where(t==0,obs[0],x0)
+    index=jnp.clip((x0+.6)/.0025,0.,80.)
+    lo=jnp.minimum(jnp.floor(index).astype(jnp.int32),79)
+    mix=index-lo
+    ref=(1-mix)*_TABLE[lo,jnp.minimum(t,998)]+mix*_TABLE[lo+1,jnp.minimum(t,998)]
+    force=ref[0]+6.*(ref[1]-obs[0])+30.*(ref[2]-obs[1])
+    return jnp.asarray([jnp.clip(force,-1.,1.)],jnp.float32),(t+1,x0)
+```
+
+</details>
 
 General internet access is disabled by default. The sandbox can reach only the
 selected model provider's HTTPS domains through a host-side gateway; direct
@@ -137,26 +187,20 @@ connections, other websites, and package downloads are blocked. Use
 `--allow-internet` to explicitly allow general access, or `--model-host` to set
 exact provider domains. Evaluators always remain offline.
 
-## Continuous Mountain Car
-
-The agent writes a JAX policy in `final_solution.py` for Gymnax Continuous
-Mountain Car. See the [task guide](tasks/continuous_mountain_car/README.md) for
-building its CPU image, running one or multiple seeds, and scoring the final
-policies. Defaults are two hours per seed with no token or evaluation-count limit.
-
-Read the complete initial sandbox previews:
+See the [task guide](tasks/continuous_mountain_car/README.md) for multiple seeds
+and reporting, or read the complete initial sandbox previews:
 [Codex](previews/continuous-mountain-car/codex.md),
-[Claude Code](previews/continuous-mountain-car/claude.md), or
+[Claude Code](previews/continuous-mountain-car/claude.md), and
 [OpenCode](previews/continuous-mountain-car/opencode.md).
 
 ## Bring your own task
 
-Define a `Task` in a Python module. Give it a **task specification** describing what to build and which metric to optimize, a **fitness function** that scores the submitted solution, and a **Docker image** with the task’s dependencies. See the [affine task definition](tasks/affine/__init__.py) and its [evaluator](tasks/affine/evaluate.py).
+Define a `Task` in a Python module. Give it a **task specification** describing what to build and which metric to optimize, a **fitness function** that scores the submitted solution, and a **Docker image** with the task’s dependencies. See the [Mountain Car task](tasks/continuous_mountain_car/__init__.py), or the smaller [affine task definition](tasks/affine/__init__.py) and its [evaluator](tasks/affine/evaluate.py).
 
 The image must contain Python and your environment's dependencies. You can build it on the execution host or use an image from Docker Hub or another registry. AutoAstra reuses the local image if present and pulls it if missing; it does not build images automatically.
 
 <details>
-<summary><strong>Example: the affine demo task object</strong></summary>
+<summary><strong>Minimal task object: affine regression</strong></summary>
 
 From [`tasks/affine/__init__.py`](tasks/affine/__init__.py):
 
