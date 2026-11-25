@@ -69,10 +69,11 @@ https://github.com/shshnkreddy/autoastra. Help me set it up for this project.
 
 ## Setup
 
-With Python 3.11 or newer, install AutoAstra:
+With Python 3.11 or newer, install the GitHub version for provider-only networking
+and the Mountain Car task. These changes are not yet in the PyPI release.
 
 ```sh
-pip install autoastra
+python -m pip install --upgrade --force-reinstall git+https://github.com/shshnkreddy/autoastra.git
 ```
 
 This installs AutoAstra and its Python dependencies. Also install [Docker](https://docs.docker.com/engine/install/) and your chosen agent CLI on a Linux machine.
