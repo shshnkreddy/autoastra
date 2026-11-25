@@ -1,0 +1,4 @@
+interface:
+  display_name: "AutoAstra Task Creation"
+  short_description: "Create tasks, previews, and experiment wrappers"
+  default_prompt: "Use $autoastra-create-task to turn my problem or existing codebase into an AutoAstra task with a sandbox preview and run commands."

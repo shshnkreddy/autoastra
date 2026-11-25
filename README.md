@@ -58,7 +58,9 @@ https://github.com/shshnkreddy/autoastra. Help me set it up for this project.
 1. Read the README. Help me install AutoAstra and my chosen coding agent,
    configure an API key or subscription login/token, and set up a custom
    task if needed.
-2. If I need a custom task:
+2. If I need a custom task, first read and follow the task-creation skill:
+   https://github.com/shshnkreddy/autoastra/blob/main/.agents/skills/autoastra-create-task/SKILL.md
+   Read its linked guides as needed for Docker, multiple seeds, and wrappers.
    a. Ask whether I want to create it from an existing codebase.
    b. Always generate and show me a preview of the initial sandbox.
    c. Ensure the required Docker image is available locally on the machine
@@ -171,3 +173,4 @@ autoastra run my_task:task --output runs/my-task
 ```
 
 ## Citation
+
