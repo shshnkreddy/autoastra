@@ -181,11 +181,7 @@ def act(obs,state,rng):
 
 </details>
 
-General internet access is disabled by default. The sandbox can reach only the
-selected model provider's HTTPS domains through a host-side gateway; direct
-connections, other websites, and package downloads are blocked. Use
-`--allow-internet` to explicitly allow general access, or `--model-host` to set
-exact provider domains. Evaluators always remain offline.
+General internet access is disabled by default. Add `--allow-internet` to enable it.
 
 See the [task guide](tasks/continuous_mountain_car/README.md) for multiple seeds
 and reporting, or read the complete initial sandbox previews:
