@@ -153,7 +153,7 @@ python -m autoastra.wrappers.mountain_car runs/mountain-car \
 ```
 
 <details>
-<summary><strong>Generated final policy and return — Sol 6.1, seed 0</strong></summary>
+<summary><strong>Generated final policy and return — Sol 6.1</strong></summary>
 
 **Final held-out return: 99.65** (mean over 1,024 episodes).
 
