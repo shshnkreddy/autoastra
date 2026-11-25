@@ -10,7 +10,7 @@ Turn the user's problem into an importable `Task`, a working evaluation environm
 ## Understand the task
 
 - Ask whether to start from an existing codebase unless the user has already specified one. Inspect its solution interface, evaluator, data, and dependencies before introducing new conventions.
-- Establish the objective, fitness direction, constraints, expected solution, and available development feedback. Distinguish training loss used for optimisation, validation loss used to compare and select solutions, and held-out test loss used for final evaluation.
+- Establish the objective, fitness direction, constraints, expected solution, and available development feedback. Distinguish the feedback the agent can use to explore, train, or select a solution from the metric that measures its true fitness. For example, an agent might use training loss to update a model and validation loss to choose a checkpoint, while held-out test loss measures the selected checkpoint’s final performance.
 - Establish the execution machine, resource requirements, budgets, and desired number of independent runs. Respect the user's choice of machine; do not assume execution should happen on the machine where files are edited.
 - Use the repository's [README](../../../README.md) for AutoAstra installation, agent installation, and authentication. Inspect the installed version and CLI help before relying on an option; these references describe the current repository interfaces.
 
