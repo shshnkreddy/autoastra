@@ -1,0 +1,20 @@
+{
+  "name": "continuous_mountain_car",
+  "title": "Write a Continuous Mountain Car policy",
+  "description": "Write a policy that drives an underpowered car up the right-hand hill. Maximise the mean episode return.",
+  "solution_interface": "Submit one self-contained Python file named final_solution.py. Define init_state(), which returns the policy's initial memory, and act(obs, state, rng), which returns (action, next_state). The observation contains position and velocity. Return a floating-point JAX array of shape (1,) with a finite action between -1 and 1. Read policy_api.md for the complete interface and a working example.",
+  "metric": "mean_episode_return",
+  "metric_description": "An episode earns 100 when the car reaches position 0.45 with nonnegative velocity. Every step, including the successful step, costs 0.1 times the square of the action. Fitness is the average sum of these native rewards across 256 development episodes. Higher is better. There is no separate reward for finishing quickly. A policy that never acts scores zero but does not solve the task.",
+  "direction": "maximize",
+  "constraints": [
+    "Keep all policy code and any learned parameters in final_solution.py. It must work without scratch.py, other workspace files, checkpoints, or network access.",
+    "Use only the current observation, your policy memory, the supplied random key, and fixed constants when selecting actions. Do not inspect evaluator state, evaluation seeds, other files, or other processes.",
+    "Write pure JAX-compatible functions that can run under jax.jit, jax.vmap, and jax.lax.scan. Memory must have the same structure, shapes, and dtypes on every step. Its numeric values must remain finite.",
+    "Every action must have shape (1,), a floating-point dtype, and finite values in [-1, 1]. Invalid actions or incompatible memory make the evaluation fail; they do not receive a numeric fitness.",
+    "You may design a controller analytically, search its parameters, or train a policy in scratch.py. Put the resulting controller and parameters into final_solution.py.",
+    "Do not modify the environment or the fitness definition. The public environment implementation is available in the installed gymnax package."
+  ],
+  "evaluation": "Each episode starts with position sampled uniformly from [-0.6, -0.4] and velocity zero. An episode ends on success or after 999 steps. Memory resets for each episode, and rewards after the first episode boundary are never counted. Official fitness-eval calls use the same development episodes and random keys for a given run seed, so revisions can be compared fairly. Separate run seeds use separate development batches. After research, the mountain_car wrapper can score the selected policies on a shared, separate batch of 1024 test episodes. Test results are for final reporting and must not be used to tune the policies.",
+  "available_information": "Read environment.md for the pinned environment, dynamics, and reward. Read policy_api.md for policy examples and informal testing. Use fitness-eval for official development scores and experiment-ledger to record each revision and the reasoning behind it.",
+  "expected_result": "Leave a complete working final_solution.py. The default runner selects the revision with the highest official development fitness. Follow the final selection instructions in the agent instructions if the run uses a different selection mode. Explain your experiments and remaining limitations in the ledger."
+}

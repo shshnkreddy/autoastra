@@ -27,10 +27,15 @@ class SandboxConfig:
     tmp_mb: int = 64
     command_timeout_seconds: int = 60
     network_access: bool = False  # Development only; evaluations stay offline.
+    model_hosts: tuple[str, ...] = ()  # Optional HTTPS-only host gateway.
 
     def __post_init__(self):
         if type(self.network_access) is not bool:
             raise ValueError("network_access must be a boolean")
+        from .network import validate_hosts
+        validate_hosts(self.model_hosts)
+        if self.network_access and self.model_hosts:
+            raise ValueError('Choose general network access or model-only access')
         if not isinstance(self.python_executable, str) or not self.python_executable.strip() or "\0" in self.python_executable:
             raise ValueError("python_executable must name the Python executable inside the image")
         if not ((type(self.gpus) is int and self.gpus >= 0) or self.gpus == "all"):
@@ -107,6 +112,7 @@ class Sandbox:
     config: SandboxConfig
     runtime: object = None
     closed: bool = False
+    gateway: object = None
 
     @property
     def workspace(self) -> Path:
@@ -142,8 +148,12 @@ class Sandbox:
             try:
                 _docker("rm", "--force", self.container_id)
             finally:
-                if self.runtime is not None:
-                    self.runtime.close()
+                try:
+                    if self.gateway is not None:
+                        self.gateway.close()
+                finally:
+                    if self.runtime is not None:
+                        self.runtime.close()
             self.closed = True
             self.save_state()
 
@@ -265,6 +275,10 @@ def create_sandbox(task: Task, destination: str | Path, *,
     options = _container_options(config, image_path)
     if config.network_access:
         options[options.index('--network=none')] = '--network=bridge'
+    if config.model_hosts:
+        from .network import proxy_environment
+        options += proxy_environment()
+        options += ['--mount', f'type=bind,src={Path(__file__).with_name("network.py")},dst=/opt/autoastra/network.py,readonly']
     command = [
         "create", "--name", name, "--label", "autoastra.managed=true",
         *options, *agent_mounts,
@@ -278,16 +292,37 @@ def create_sandbox(task: Task, destination: str | Path, *,
         "-I", "-c", "import time; time.sleep(31536000)",
     ]
     runtime = None
+    gateway = None
     try:
         runtime = Runtime(task, directory, image_id, image_path, config, run_config)
+        if config.model_hosts:
+            from .network import ModelGateway
+            gateway = ModelGateway(runtime.directory / 'ipc/model-proxy.sock', config.model_hosts)
+            command[-2:] = ['/opt/autoastra/network.py']
         container_id = _docker(*command).stdout.strip()
         _docker("start", container_id)
-        sandbox = Sandbox(directory, container_id, image_id, config, runtime=runtime)
-        probe = sandbox.run([config.python_executable, "-I", "-c", "from pathlib import Path; assert Path.cwd() == Path('/task/workspace')"])
+        sandbox = Sandbox(directory, container_id, image_id, config, runtime=runtime, gateway=gateway)
+        probe_code = "from pathlib import Path; assert Path.cwd() == Path('/task/workspace')"
+        if config.model_hosts:
+            probe_code += '''
+import socket, time
+for attempt in range(50):
+    try:
+        with socket.create_connection(('127.0.0.1', 18080), timeout=1):
+            pass
+        break
+    except OSError:
+        time.sleep(0.1)
+else:
+    raise RuntimeError('Model gateway relay did not start')
+'''
+        probe = sandbox.run([config.python_executable, "-I", "-c", probe_code])
         if probe.returncode:
             raise RuntimeError("The sandbox failed its startup check: " + probe.stderr.strip())
         return sandbox
     except BaseException:
+        if gateway is not None:
+            gateway.close()
         if runtime is not None:
             runtime.close()
         # The unique name also covers a lost reply from docker create.

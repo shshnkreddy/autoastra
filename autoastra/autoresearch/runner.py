@@ -220,7 +220,9 @@ def run(task, destination, *, config=None, sandbox_config=None, run_config=None,
         raise RuntimeError('Batch interrupted before seed startup')
     binary, home = _agent_paths(config)
     resources = sandbox_config or SandboxConfig(memory_mb=2048, pids_limit=256, tmp_mb=256)
-    resources = replace(resources, network_access=True)
+    if not resources.network_access and not resources.model_hosts:
+        from .network import model_hosts
+        resources = replace(resources, model_hosts=model_hosts(config))
     sandbox = create_sandbox(task, destination, config=resources, run_config=limits,
                              codex_home=home, **{f'{config.agent}_binary': binary})
     runtime = sandbox.runtime

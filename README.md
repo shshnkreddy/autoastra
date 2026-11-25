@@ -130,6 +130,24 @@ autoastra result runs/affine
 
 Read the experiment history in `runs/affine/task/ledger/ledger.md`. For budgets, parallel seeds, and GPUs, see `autoastra run --help`.
 
+General internet access is disabled by default. The sandbox can reach only the
+selected model provider's HTTPS domains through a host-side gateway; direct
+connections, other websites, and package downloads are blocked. Use
+`--allow-internet` to explicitly allow general access, or `--model-host` to set
+exact provider domains. Evaluators always remain offline.
+
+## Continuous Mountain Car
+
+The agent writes a JAX policy in `final_solution.py` for Gymnax Continuous
+Mountain Car. See the [task guide](tasks/continuous_mountain_car/README.md) for
+building its CPU image, running one or multiple seeds, and scoring the final
+policies. Defaults are two hours per seed with no token or evaluation-count limit.
+
+Read the complete initial sandbox previews:
+[Codex](previews/continuous-mountain-car/codex.md),
+[Claude Code](previews/continuous-mountain-car/claude.md), or
+[OpenCode](previews/continuous-mountain-car/opencode.md).
+
 ## Bring your own task
 
 Define a `Task` in a Python module. Give it a **task specification** describing what to build and which metric to optimize, a **fitness function** that scores the submitted solution, and a **Docker image** with the task’s dependencies. See the [affine task definition](tasks/affine/__init__.py) and its [evaluator](tasks/affine/evaluate.py).
@@ -173,4 +191,3 @@ autoastra run my_task:task --output runs/my-task
 ```
 
 ## Citation
-

@@ -1,0 +1,13 @@
+{
+  "environment": "ContinuousMountainCar",
+  "gymnax_commit": "77d4863333e7ec203d0b4a43f998b2b691fdb997",
+  "protocol_version": 1,
+  "development_episodes": 256,
+  "test_episodes": 1024,
+  "max_steps": 999,
+  "goal_position": 0.45,
+  "goal_velocity": 0.0,
+  "action_bounds": [-1.0, 1.0],
+  "initial_position_bounds": [-0.6, -0.4],
+  "initial_velocity": 0.0
+}

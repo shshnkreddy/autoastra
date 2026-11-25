@@ -5,9 +5,10 @@ import os
 
 
 def command(container, model, binary, instruction):
-    config = {'instructions': ['/task/AGENTS.md'], 'permission': {
+    config = {'instructions': ['/task/AGENTS.md'], 'autoupdate': False, 'permission': {
         'external_directory': {'/task/*': 'allow'}, 'task': 'deny'}}
     args = ['docker', 'exec', '--env', 'OPENCODE_CONFIG_CONTENT=' + json.dumps(config)]
+    args += ['--env', 'OPENCODE_DISABLE_MODELS_FETCH=true']
     key = {'openrouter': 'OPENROUTER_API_KEY', 'anthropic': 'ANTHROPIC_API_KEY',
            'openai': 'OPENAI_API_KEY', 'opencode': 'OPENCODE_API_KEY',
            'opencode-go': 'OPENCODE_API_KEY'}.get(model.partition('/')[0])

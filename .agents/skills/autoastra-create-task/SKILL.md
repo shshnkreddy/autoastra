@@ -16,6 +16,8 @@ Turn the user's problem into an importable `Task`, a working evaluation environm
 
 ## Define and prepare
 
+Be very careful when adding information about solution strategies. Before including hints, recommended algorithms, heuristics, worked solutions, or strategy-bearing starter code in agent-facing materials, check with the user what is permissible unless they have already specified it. Omit unapproved strategy guidance; approval of the task objective does not imply approval to suggest how to solve it.
+
 1. Read [Task definition](references/task-definition.md). Create the specification, importable evaluator, task object, run configuration, and any starter or public context files. Keep task-specific code in the user's project.
 2. Write specifications and all agent-facing prompts in clear, human-legible language. Explicitly state the objective, how success is measured, the constraints, and what the solution must deliver: its interface, inputs, outputs, and final artifact. Explain unfamiliar terms and avoid unstated assumptions. Check that generated instructions agree with the actual evaluator and selection rule.
 3. Read [Docker environment](references/docker-environment.md). Build or pull the required image on the execution machine, and verify the dependencies and data paths needed for evaluation. Do not describe a preview alone as a working sandbox.

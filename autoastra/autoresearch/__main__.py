@@ -36,6 +36,10 @@ def main(argv=None):
     parser.add_argument('--selection', choices=('best-fitness', 'model'))
     parser.add_argument('--cpus', type=float, default=1)
     parser.add_argument('--memory-mb', type=int, default=2048)
+    parser.add_argument('--allow-internet', action='store_true',
+                        help='Allow general development internet access instead of model-provider connections only')
+    parser.add_argument('--model-host', action='append', default=[],
+                        help='Replace the provider domain allowlist with these exact HTTPS hosts (repeatable)')
     selection = parser.add_mutually_exclusive_group()
     selection.add_argument('--gpus', default='0')
     selection.add_argument('--gpu-device', action='append', default=[])
@@ -57,6 +61,8 @@ def main(argv=None):
         )
         resources = SandboxConfig(
             cpus=args.cpus, memory_mb=args.memory_mb, pids_limit=256, tmp_mb=256,
+            network_access=args.allow_internet,
+            model_hosts=tuple(args.model_host),
             gpus='all' if args.gpus == 'all' else int(args.gpus), gpu_devices=tuple(args.gpu_device),
         )
         if args.jobs < 1 or (args.jobs > 1 and not args.seeds):
