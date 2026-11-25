@@ -133,6 +133,8 @@ autoastra preview tasks.continuous_mountain_car:task \
   --provider codex --output previews/mountain-car --print-to previews/mountain-car.md
 ```
 
+[View the Mountain Car sandbox preview](previews/continuous-mountain-car/codex.md).
+
 With your coding agent configured, start one run:
 
 ```sh
